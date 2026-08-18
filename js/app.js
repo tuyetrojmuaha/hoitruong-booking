@@ -45,6 +45,7 @@ const sheetSub = document.getElementById("sheetSub");
 const startSelect = document.getElementById("startSelect");
 const endSelect = document.getElementById("endSelect");
 const nameInput = document.getElementById("nameInput");
+const phoneInput = document.getElementById("phoneInput"); // <-- Thêm dòng này
 const unitSelect = document.getElementById("unitSelect");
 const unitOtherField = document.getElementById("unitOtherField");
 const unitOtherInput = document.getElementById("unitOtherInput");
@@ -253,6 +254,7 @@ function showFormForSlot(hallId, date, tappedStart) {
   populateEndOptions();
 
   nameInput.value = "";
+  phoneInput.value = ""; // <-- Thêm dòng này reset ô SĐT
   unitSelect.value = UNITS[0];
   unitOtherField.style.display = "none";
   unitOtherInput.value = "";
@@ -293,11 +295,16 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   formError.classList.remove("show");
   const { hallId, date } = pendingSlotCtx;
   const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
   const unit = unitSelect.value === "__other__" ? unitOtherInput.value.trim() : unitSelect.value;
   const start = Number(startSelect.value);
   const end = Number(endSelect.value);
 
   if (!name) return showFormError("Vui lòng nhập họ và tên.");
+  if (!phone) return showFormError("Vui lòng nhập số điện thoại liên hệ.");
+  if (!/^[0-9]{9,11}$/.test(phone.replace(/\s+/g, ''))) {
+    return showFormError("Số điện thoại không hợp lệ (cần từ 9 - 11 chữ số).");
+  }
   if (!unit) return showFormError("Vui lòng nhập tên đơn vị.");
   if (!(end > start)) return showFormError("Giờ kết thúc phải sau giờ bắt đầu.");
 
@@ -317,6 +324,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
       startTime: minToLabel(start),
       endTime: minToLabel(end),
       requesterName: name,
+      phone,
       unit,
       purpose: purposeInput.value.trim(),
       status: "pending",
@@ -361,6 +369,7 @@ function renderRequestList() {
   if (term) {
     list = list.filter(r =>
       (r.requesterName || "").toLowerCase().includes(term) ||
+      (r.phone || "").toLowerCase().includes(term) ||
       (r.lookupCode || "").toLowerCase() === term
     );
   } else {
