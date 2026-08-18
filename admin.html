@@ -14,13 +14,21 @@
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <h1>Đăng nhập quản trị</h1>
-    <p>Nhập mật khẩu admin để phê duyệt lịch đăng ký.</p>
+    <p>Nhập tài khoản admin để phê duyệt lịch đăng ký.</p>
+    
     <div class="field">
-      <input type="password" id="pwInput" placeholder="Mật khẩu">
+      <label for="emailInput" style="color:var(--text-muted); font-size:12px;">Email Admin</label>
+      <input type="email" id="emailInput" placeholder="admin@ht108.com" value="admin@ht108.com">
     </div>
-    <p class="form-error" id="loginError">Sai mật khẩu.</p>
+
+    <div class="field">
+      <label for="pwInput" style="color:var(--text-muted); font-size:12px;">Mật khẩu</label>
+      <input type="password" id="pwInput" placeholder="••••••••">
+    </div>
+
+    <p class="form-error" id="loginError">Tài khoản hoặc mật khẩu không chính xác.</p>
     <button class="btn btn-primary" id="loginBtn" style="width:100%;">Đăng nhập</button>
-    <p style="margin-top:14px;"><a href="index.html" style="color:var(--text-muted); font-size:12.5px;">← Về bảng đăng ký</a></p>
+    <p style="margin-top:14px;"><a href="index.html" style="color:var(--text-muted); font-size:13px;">← Quay lại bảng lịch</a></p>
   </div>
 </div>
 
