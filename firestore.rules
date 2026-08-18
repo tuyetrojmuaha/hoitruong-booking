@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// ============================================================
+// QUY TẮC BẢO MẬT FIRESTORE — bản thử nghiệm (không có đăng nhập thật)
+//
+// - Ai cũng đọc được lịch (cần thiết để hiển thị bảng công khai).
+// - Ai cũng tạo được yêu cầu đăng ký mới (đúng nhu cầu: không cần tài khoản).
+// - Ai cũng có thể cập nhật/xoá — vì trang admin chỉ chặn bằng mật khẩu
+//   phía trình duyệt (KHÔNG phải xác thực thật ở tầng server).
+//
+// ⚠ Đây là mức bảo mật phù hợp cho bản THỬ NGHIỆM NỘI BỘ.
+// Nếu triển khai chính thức, nên chuyển admin sang Firebase Authentication
+// và giới hạn update/delete theo request.auth.token, ví dụ:
+//   allow update, delete: if request.auth != null && request.auth.token.admin == true;
+// ============================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /requests/{requestId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.keys().hasAll(
+          ['hallId','date','startTime','endTime','requesterName','unit','status']
+        )
+        && request.resource.data.status == 'pending'
+        && request.resource.data.hallId is string
+        && request.resource.data.date is string
+        && request.resource.data.requesterName is string
+        && request.resource.data.requesterName.size() > 0;
+
+      allow update, delete: if true;
+    }
+  }
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Bảng đăng ký hội trường</title>
+<meta name="description" content="Đăng ký và theo dõi lịch sử dụng hội trường HT1–HT14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div>
+      <p class="brand-eyebrow">HT1 — HT14</p>
+      <h1 class="brand-title">Bảng đăng ký hội trường</h1>
+    </div>
+    <a class="admin-link" href="admin.html">Trang quản trị →</a>
+  </div>
+
+  <div class="wrap">
+    <div class="datebar">
+      <button class="nav" id="prevWindow" aria-label="Khoảng trước">‹</button>
+      <div class="date-field">
+        <input type="date" id="jumpDate" title="Nhảy đến ngày">
+      </div>
+      <button class="nav" id="nextWindow" aria-label="Khoảng sau">›</button>
+      <button class="today-btn" id="todayBtn">Hôm nay</button>
+    </div>
+    <p class="dow-label" id="rangeLabel"></p>
+
+    <div class="legend">
+      <span><span class="dot free"></span>Còn trống</span>
+      <span><span class="dot pending"></span>Có lịch chờ duyệt</span>
+      <span><span class="dot approved"></span>Đã duyệt</span>
+      <span><span class="dot full"></span>Kín lịch</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid-wrap">
+    <table class="cal-grid" id="calGrid">
+      <thead><tr id="calHeadRow"><th class="corner-cell">Hội trường</th></tr></thead>
+      <tbody id="calBody"></tbody>
+    </table>
+  </div>
+  <p class="grid-hint">Chạm vào một ô còn trống để đăng ký. Vuốt ngang để xem thêm ngày.</p>
+
+  <h2 class="section-title">Tra cứu đăng ký</h2>
+  <div class="search-row">
+    <input type="text" id="searchBox" placeholder="Nhập họ tên hoặc mã tra cứu…">
+  </div>
+  <div class="req-list" id="reqList"></div>
+
+  <p class="footer-note">Dữ liệu được lưu tối đa 90 ngày trước và 90 ngày sau ngày hiện tại.</p>
+</main>
+
+<!-- ============ Bottom sheet: chọn giờ → điền form đăng ký ============ -->
+<div class="sheet-overlay" id="sheetOverlay">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-handle"></div>
+
+    <!-- Bước 1: chọn giờ trong ngày -->
+    <div id="sheetPickView">
+      <h2 id="sheetTitle">Chọn giờ</h2>
+      <p class="sheet-sub" id="pickSub"></p>
+      <div class="legend" style="margin-bottom:10px;">
+        <span><span class="dot free"></span>Trống</span>
+        <span><span class="dot pending"></span>Chờ duyệt</span>
+        <span><span class="dot approved"></span>Đã duyệt</span>
+      </div>
+      <div class="slot-strip sheet-slot-strip" id="pickStrip"></div>
+      <p class="form-error" id="pickError"></p>
+      <div class="sheet-actions">
+        <button class="btn btn-secondary" id="pickCloseBtn">Đóng</button>
+      </div>
+    </div>
+
+    <!-- Bước 2: điền thông tin đăng ký -->
+    <div id="sheetFormView" style="display:none;">
+      <h2>Đăng ký sử dụng</h2>
+      <p class="sheet-sub" id="sheetSub"></p>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="startSelect">Giờ bắt đầu</label>
+          <select id="startSelect"></select>
+        </div>
+        <div class="field">
+          <label for="endSelect">Giờ kết thúc</label>
+          <select id="endSelect"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="nameInput">Họ và tên người đăng ký</label>
+        <input type="text" id="nameInput" placeholder="Nguyễn Văn A">
+      </div>
+
+      <div class="field">
+        <label for="unitSelect">Đơn vị</label>
+        <select id="unitSelect"></select>
+      </div>
+      <div class="field" id="unitOtherField" style="display:none;">
+        <label for="unitOtherInput">Tên đơn vị</label>
+        <input type="text" id="unitOtherInput" placeholder="Nhập tên đơn vị">
+      </div>
+
+      <div class="field">
+        <label for="purposeInput">Mục đích sử dụng (không bắt buộc)</label>
+        <textarea id="purposeInput" placeholder="Ví dụ: họp giao ban tuần"></textarea>
+      </div>
+
+      <p class="form-error" id="formError"></p>
+
+      <div class="sheet-actions">
+        <button class="btn btn-secondary" id="backBtn">← Quay lại</button>
+        <button class="btn btn-primary" id="submitBtn">Gửi đăng ký</button>
+      </div>
+    </div>
+
+    <!-- Bước 3: xác nhận -->
+    <div id="sheetSuccessView" class="sheet-success" style="display:none;">
+      <h2>Đã gửi yêu cầu</h2>
+      <p class="sheet-sub">Yêu cầu đang chờ admin phê duyệt. Lưu mã bên dưới để tra cứu kết quả:</p>
+      <div class="code" id="lookupCodeOut"></div>
+      <div class="sheet-actions">
+        <button class="btn btn-primary" id="doneBtn">Xong</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

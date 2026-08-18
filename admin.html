@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Quản trị — Bảng đăng ký hội trường</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h1>Đăng nhập quản trị</h1>
+    <p>Nhập mật khẩu admin để phê duyệt lịch đăng ký.</p>
+    <div class="field">
+      <input type="password" id="pwInput" placeholder="Mật khẩu">
+    </div>
+    <p class="form-error" id="loginError">Sai mật khẩu.</p>
+    <button class="btn btn-primary" id="loginBtn" style="width:100%;">Đăng nhập</button>
+    <p style="margin-top:14px;"><a href="index.html" style="color:var(--text-muted); font-size:12.5px;">← Về bảng đăng ký</a></p>
+  </div>
+</div>
+
+<div id="adminApp" style="display:none;">
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div>
+        <p class="brand-eyebrow">QUẢN TRỊ</p>
+        <h1 class="brand-title">Phê duyệt hội trường</h1>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <a class="admin-link" href="index.html">Xem bảng đăng ký</a>
+        <button class="admin-link" id="logoutBtn" style="cursor:pointer;">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="tabbar">
+      <button class="tab-btn active" data-tab="pending">Chờ duyệt</button>
+      <button class="tab-btn" data-tab="history">Lịch sử</button>
+    </div>
+
+    <section id="pendingTab">
+      <div id="pendingList"></div>
+    </section>
+
+    <section id="historyTab" style="display:none;">
+      <div class="filters">
+        <select id="filterHall"><option value="">Tất cả hội trường</option></select>
+        <select id="filterStatus">
+          <option value="">Tất cả trạng thái</option>
+          <option value="approved">Đã duyệt</option>
+          <option value="pending">Chờ duyệt</option>
+          <option value="rejected">Từ chối</option>
+        </select>
+      </div>
+      <div id="historyList"></div>
+
+      <div class="cleanup-box">
+        <p>Xoá vĩnh viễn các yêu cầu có ngày sử dụng cách đây hơn 90 ngày để giữ dữ liệu gọn.</p>
+        <button class="btn btn-secondary btn-sm" id="cleanupBtn" style="flex:0 0 auto;">Dọn dẹp lịch sử cũ</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>
